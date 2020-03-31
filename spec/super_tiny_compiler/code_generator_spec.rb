@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/super_tiny_compiler/code_generator'
+require 'super_tiny_compiler/code_generator'
 
 module SuperTinyCompiler
   class DummyCodeGeneratorContainer

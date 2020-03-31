@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/super_tiny_compiler'
+require 'super_tiny_compiler'
 
 describe SuperTinyCompiler do
   let!(:input) { file_fixture('input_source.lisp').read.strip }

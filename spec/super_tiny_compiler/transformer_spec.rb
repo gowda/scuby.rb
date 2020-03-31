@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/super_tiny_compiler/transformer'
+require 'super_tiny_compiler/transformer'
 
 module SuperTinyCompiler
   class DummyTransformerContainer

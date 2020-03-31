@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/super_tiny_compiler/tokenizer'
-require_relative '../../lib/super_tiny_compiler/parser'
+require 'super_tiny_compiler/tokenizer'
+require 'super_tiny_compiler/parser'
 
 module SuperTinyCompiler
   class DummyParserContainer
