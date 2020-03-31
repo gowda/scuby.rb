@@ -2,12 +2,12 @@
 
 # frozen_string_literal
 
-require_relative 'super_tiny_compiler/tokenizer'
-require_relative 'super_tiny_compiler/parser'
-require_relative 'super_tiny_compiler/transformer'
-require_relative 'super_tiny_compiler/code_generator'
-
 module SuperTinyCompiler
+  require 'super_tiny_compiler/tokenizer'
+  require 'super_tiny_compiler/parser'
+  require 'super_tiny_compiler/transformer'
+  require 'super_tiny_compiler/code_generator'
+
   include Tokenizer
   include Parser
   include Transformer

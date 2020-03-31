@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'ast_node'
+require_relative 'syntax_tree'
 
 module SuperTinyCompiler
   module CodeGenerator
@@ -10,26 +10,34 @@ module SuperTinyCompiler
 
     module ClassMethods
       def generate_code(ast)
-        dump_node(ast)
+        RubyCodeGeneratorTransformer.new.transform(ast)
+      end
+    end
+
+    class RubyCodeGeneratorTransformer < SyntaxTree::Transformer
+      def transform_program(args)
+        _, _, *statements = args
+        statements.map { |statement| transform statement }.join('\n')
       end
 
-      def dump_node(node)
-        case node.type
-        when AstNode::PROGRAM
-          node.body.map { |child| dump_node(child) }.join('\n')
-        when AstNode::EXPRESSION_STATEMENT
-          "#{dump_node(node.expression)};"
-        when AstNode::CALL_EXPRESSION
-          "#{node.callee}(#{node.params.map { |child| dump_node(child) }.join(',')})"
-        when AstNode::IDENTIFIER
-          node.value
-        when AstNode::NUMBER_LITERAL
-          node.value
-        when AstNode::STRING_LITERAL
-          "\"#{node.value}\""
-        else
-          raise ArgumentError, "Unrecognized node in syntax tree: #{node[:type]}"
-        end
+      def transform_expression_statement(args)
+        _, _, expression = args
+        "#{transform expression};"
+      end
+
+      def transform_call_expression(args)
+        _, callee, *params = args
+        "#{callee}(#{params.map { |param| transform param }.join(',')})"
+      end
+
+      def transform_number_literal(args)
+        _, value, = args
+        value
+      end
+
+      def transform_string_literal(args)
+        _, value, = args
+        "\"#{value}\""
       end
     end
   end

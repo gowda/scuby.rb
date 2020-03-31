@@ -14,11 +14,13 @@ begin
     ].map { |name| "spec/super_tiny_compiler/#{name}" }.join(' ')
     ENV['SPEC'] = "#{ENV['SPEC']} spec/super_tiny_compiler_spec.rb"
   end
-rescue LoadError
+rescue LoadError => ex
+  puts ex.full_message
 end
 
 begin
   require 'rubocop/rake_task'
   RuboCop::RakeTask.new(:cop)
-rescue LoadError
+rescue LoadError => ex
+  puts ex.full_message
 end

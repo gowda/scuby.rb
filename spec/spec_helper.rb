@@ -99,7 +99,6 @@ RSpec.configure do |config|
   #   Kernel.srand config.seed
 
   Dir[File.expand_path('support/**/*.rb', __dir__)].sort.each do |f|
-    puts "loading #{f}"
     require f
   end
 end

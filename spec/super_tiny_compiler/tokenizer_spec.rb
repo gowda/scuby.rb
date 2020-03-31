@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/super_tiny_compiler/tokenizer'
+require 'super_tiny_compiler/tokenizer'
 
 module SuperTinyCompiler
   class DummyTokenizerContainer
