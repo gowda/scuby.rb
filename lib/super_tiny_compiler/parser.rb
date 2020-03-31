@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'token'
-require_relative 'ast_node'
+require_relative 'syntax_tree'
 
 module SuperTinyCompiler
   module Parser
@@ -11,70 +11,87 @@ module SuperTinyCompiler
 
     module ClassMethods
       def parse(tokens)
-        ParseTree.new(tokens).ast
+        LispParser.new(tokens).parse
       end
     end
 
-    class ParseTree
+    class LispParser
+      attr_reader :tokens, :current_position
+
       def initialize(tokens)
         @tokens = tokens
-        @ast = nil
+        @current_position = 0
       end
 
-      def ast
-        process! if @ast.nil?
-        @ast
+      def parse
+        ast = SyntaxTree::Node.new(:program)
+        while has_token?
+          ast.add_child(current_node)
+        end
+        ast
       end
 
       private
 
-      def walk(start)
-        current = start
-        token = @tokens[current]
+      def has_token?
+        @current_position < @tokens.length
+      end
 
-        case token.type
-        when Token::NUMBER
-          current += 1
-          [AstNode.new(AstNode::NUMBER_LITERAL, token.value), current]
-        when Token::STRING
-          current += 1
-          [AstNode.new(AstNode::STRING_LITERAL, token.value), current]
-        when Token::PAREN
-          if token.value == '('
-            current += 1
-            token = @tokens[current]
+      def current_token
+        @tokens[current_position]
+      end
 
-            node = AstNode.new(AstNode::CALL_EXPRESSION)
-            node.callee = token.value
+      def current_token_and_inc_pointer
+        inc_pointer
+        @tokens[current_position - 1]
+      end
 
-            current += 1
-            token = @tokens[current]
+      def inc_pointer
+        @current_position += 1
+      end
 
-            while (token.type != Token::PAREN) ||
-                  (token.type == Token::PAREN && token.value != ')')
-              param_node, current = walk(current)
-              node.add_param(param_node)
+      def current_node
+        process_next_node
+      end
 
-              token = @tokens[current]
-            end
+      def process_next_node
+        msg = "process_next_node_from_#{current_token.type}"
 
-            current += 1
-
-            [node, current]
-          else
-            raise ArgumentError, "Unrecognized token: #{token[:type]}"
-          end
+        # https://ruby-doc.org/core-2.6.3/Object.html#method-i-respond_to-3F
+        if respond_to?(msg, true)
+          send(msg)
+        else
+          raise "Unrecognized token #{current_token.type}: #{current_token.inspect}"
         end
       end
 
-      def process!
-        @ast = AstNode.new(AstNode::PROGRAM)
+      def process_next_node_from_number
+        token = current_token_and_inc_pointer
+        SyntaxTree::Node.new(SyntaxTree::Node::NUMBER_LITERAL, token.value)
+      end
 
-        current = 0
-        while current < @tokens.length
-          node, current = walk(current)
-          @ast.add_to_body(node)
+      def process_next_node_from_string
+        token = current_token_and_inc_pointer
+        SyntaxTree::Node.new(SyntaxTree::Node::STRING_LITERAL, token.value)
+      end
+
+      def not_closing_paren?(token)
+        (token.type != :paren) ||
+          (token.type == :paren && token.value != ')')
+      end
+
+      def process_next_node_from_paren
+        inc_pointer
+        node = SyntaxTree::Node.new(SyntaxTree::Node::CALL_EXPRESSION, current_token.value)
+        inc_pointer
+
+        while has_token? && not_closing_paren?(current_token)
+          node.add_child(process_next_node)
         end
+
+        inc_pointer
+
+        node
       end
     end
   end
