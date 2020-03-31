@@ -1,0 +1,21 @@
+name: tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Ruby 2.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6.x
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install --retry 3
+      - name: Rubocop
+        run: bundle exec rake cop
+      - name: Specs
+        run: bundle exec rake spec
