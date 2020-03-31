@@ -10,107 +10,102 @@ module SuperTinyCompiler
 
     module ClassMethods
       def tokenize(source)
-        TokenizerWorker.new(source).tokens
+        TokenList.new(source).to_a
       end
     end
 
-    class TokenizerWorker
+    class TokenList
+      include Enumerable
+
+      attr_reader :source
+      attr_reader :current_position
+
       def initialize(source)
         @source = source
-        @tokens = nil
+        @current_position = 0
       end
 
-      def tokens
-        process! if @tokens.nil?
-        @tokens
+      def each
+        to_enum(:each) unless block_given?
+
+        yield current_token while @current_position < @source.length
       end
 
       private
 
-      def whitespace?(char)
-        Token::WHITESPACE.match?(char)
+      def current_token
+        process_next_token
       end
 
-      def number?(char)
-        Token::NUMBERS.match?(char)
+      def current_char
+        @source[current_position]
       end
 
-      def double_quote?(char)
-        char == '"'
+      def current_char_and_inc_pointer
+        inc_pointer
+        @source[current_position - 1]
       end
 
-      def paren?(char)
-        Token::PARENS.include?(char)
+      def inc_pointer
+        @current_position += 1
       end
 
-      def letter?(char)
-        Token::LETTERS.match?(char)
+      def process_next_token
+        # skip all whitespaces
+        inc_pointer while Token.whitespace?(current_char)
+
+        process_next_token_as_string ||
+          process_next_token_as_number ||
+          process_next_token_as_name ||
+          process_next_token_as_paren
       end
 
-      def process!
-        @tokens = []
-        current = 0
+      def process_next_token_as_string
+        return nil unless Token.double_quote?(current_char)
 
-        while current < @source.length
-          char = @source[current]
+        value = String.new
+        inc_pointer
 
-          if paren?(char)
-            @tokens << Token.new(Token::PAREN, char)
-            current += 1
-            next
-          end
-
-          if whitespace?(char)
-            current += 1
-            next
-          end
-
-          if number?(char)
-            value = String.new
-
-            while number?(char)
-              value << char
-              current += 1
-              char = @source[current]
-            end
-
-            @tokens << Token.new(Token::NUMBER, value)
-            next
-          end
-
-          if double_quote?(char)
-            value = String.new
-            current += 1
-            char = @source[current]
-
-            while double_quote?(char)
-              value << char
-              current += 1
-              char = @source[current]
-            end
-
-            current += 1
-            char = @source[current]
-
-            @tokens << Token.new(Token::STRING, value)
-            next
-          end
-
-          if letter?(char)
-            value = String.new
-
-            while letter?(char)
-              value << char
-              current += 1
-              char = @source[current]
-            end
-
-            @tokens << Token.new(Token::NAME, value)
-            next
-          end
-
-          raise ArgumentError, "Unrecognized token in input: #{char}"
+        while Token.double_quote?(current_char)
+          value << current_char
+          inc_pointer
         end
+
+        inc_pointer
+
+        Token.new(Token::STRING, value)
+      end
+
+      def process_next_token_as_number
+        return nil unless Token.number?(current_char)
+
+        value = String.new
+
+        while Token.number?(current_char)
+          value << current_char
+          inc_pointer
+        end
+
+        Token.new(Token::NUMBER, value)
+      end
+
+      def process_next_token_as_name
+        return nil unless Token.letter?(current_char)
+
+        value = String.new
+
+        while Token.letter?(current_char)
+          value << current_char
+          inc_pointer
+        end
+
+        Token.new(Token::NAME, value)
+      end
+
+      def process_next_token_as_paren
+        return nil unless Token.paren?(current_char)
+
+        Token.new(Token::PAREN, current_char_and_inc_pointer)
       end
     end
   end

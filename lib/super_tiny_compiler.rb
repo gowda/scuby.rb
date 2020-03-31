@@ -3,7 +3,6 @@
 # frozen_string_literal
 
 module SuperTinyCompiler
-
   require 'super_tiny_compiler/tokenizer'
   require 'super_tiny_compiler/parser'
   require 'super_tiny_compiler/transformer'

@@ -7,10 +7,10 @@ module SuperTinyCompiler
     LETTERS = /[a-z]/i.freeze
     PARENS = ['(', ')'].freeze
 
-    PAREN = 'SuperTinyCompiler::Token::PAREN'
-    NAME = 'SuperTinyCompiler::Token::NAME'
-    NUMBER = 'SuperTinyCompiler::Token::NUMBER'
-    STRING = 'SuperTinyCompiler::Token::STRING'
+    PAREN = :paren
+    NAME = :name
+    NUMBER = :number
+    STRING = :string
 
     attr_reader :type, :value
 
@@ -25,6 +25,26 @@ module SuperTinyCompiler
 
     def ==(other)
       eql?(other)
+    end
+
+    def self.whitespace?(char)
+      WHITESPACE.match?(char)
+    end
+
+    def self.letter?(char)
+      LETTERS.match?(char)
+    end
+
+    def self.number?(char)
+      NUMBERS.match?(char)
+    end
+
+    def self.double_quote?(char)
+      char == '"'
+    end
+
+    def self.paren?(char)
+      ['(', ')'].include?(char)
     end
   end
 end
