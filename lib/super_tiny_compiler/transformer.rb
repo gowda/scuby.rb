@@ -21,7 +21,9 @@ module SuperTinyCompiler
 
         transformed_statements = statements.map do |statement|
           transformed_statement = transform statement
-          wrap_in_expression_statement(transformed_statement) if call_expression?(transformed_statement)
+          if call_expression?(transformed_statement)
+            wrap_in_expression_statement(transformed_statement)
+          end
         end
 
         SyntaxTree::Node.new(:program, nil, transformed_statements)
@@ -30,7 +32,11 @@ module SuperTinyCompiler
       def transform_call_expression(args)
         _, callee, *params = args
 
-        SyntaxTree::Node.new(:call_expression, callee, params.map { |param| transform param })
+        SyntaxTree::Node.new(
+          :call_expression,
+          callee,
+          params.map { |param| transform param }
+        )
       end
 
       private

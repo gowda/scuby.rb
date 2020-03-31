@@ -25,15 +25,13 @@ module SuperTinyCompiler
 
       def parse
         ast = SyntaxTree::Node.new(:program)
-        while has_token?
-          ast.add_child(current_node)
-        end
+        ast.add_child(current_node) while token?
         ast
       end
 
       private
 
-      def has_token?
+      def token?
         @current_position < @tokens.length
       end
 
@@ -58,21 +56,21 @@ module SuperTinyCompiler
         msg = "process_next_node_from_#{current_token.type}"
 
         # https://ruby-doc.org/core-2.6.3/Object.html#method-i-respond_to-3F
-        if respond_to?(msg, true)
-          send(msg)
-        else
-          raise "Unrecognized token #{current_token.type}: #{current_token.inspect}"
+        unless respond_to?(msg, true)
+          raise "Unrecognized token #{current_token.value}"
         end
+
+        send(msg)
       end
 
       def process_next_node_from_number
         token = current_token_and_inc_pointer
-        SyntaxTree::Node.new(SyntaxTree::Node::NUMBER_LITERAL, token.value)
+        SyntaxTree::Node.new(:number_literal, token.value)
       end
 
       def process_next_node_from_string
         token = current_token_and_inc_pointer
-        SyntaxTree::Node.new(SyntaxTree::Node::STRING_LITERAL, token.value)
+        SyntaxTree::Node.new(:string_literal, token.value)
       end
 
       def not_closing_paren?(token)
@@ -82,10 +80,10 @@ module SuperTinyCompiler
 
       def process_next_node_from_paren
         inc_pointer
-        node = SyntaxTree::Node.new(SyntaxTree::Node::CALL_EXPRESSION, current_token.value)
+        node = SyntaxTree::Node.new(:call_expression, current_token.value)
         inc_pointer
 
-        while has_token? && not_closing_paren?(current_token)
+        while token? && not_closing_paren?(current_token)
           node.add_child(process_next_node)
         end
 

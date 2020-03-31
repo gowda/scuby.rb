@@ -3,14 +3,6 @@
 module SuperTinyCompiler
   module SyntaxTree
     class Node
-      PROGRAM = :program
-      CALL_EXPRESSION = :call_expression
-      NUMBER_LITERAL = :number_literal
-      STRING_LITERAL = :string_literal
-      NAME = :name
-      EXPRESSION_STATEMENT = :expression_statement
-      IDENTIFIER = :identifier
-
       attr_accessor :type, :value, :children
 
       def initialize(type, value = nil, children = [])

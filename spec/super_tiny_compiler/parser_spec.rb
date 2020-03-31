@@ -23,13 +23,13 @@ module SuperTinyCompiler
       ]
     end
     let!(:ast) do
-      program = SyntaxTree::Node.new(SyntaxTree::Node::PROGRAM)
+      program = SyntaxTree::Node.new(:program)
 
-      add_expression = SyntaxTree::Node.new(SyntaxTree::Node::CALL_EXPRESSION, 'add')
-      add_expression.add_child(SyntaxTree::Node.new(SyntaxTree::Node::NUMBER_LITERAL, '2'))
-      subtract_expression = SyntaxTree::Node.new(SyntaxTree::Node::CALL_EXPRESSION, 'subtract')
-      subtract_expression.add_child(SyntaxTree::Node.new(SyntaxTree::Node::NUMBER_LITERAL, '4'))
-      subtract_expression.add_child(SyntaxTree::Node.new(SyntaxTree::Node::NUMBER_LITERAL, '2'))
+      add_expression = SyntaxTree::Node.new(:call_expression, 'add')
+      add_expression.add_child(SyntaxTree::Node.new(:number_literal, '2'))
+      subtract_expression = SyntaxTree::Node.new(:call_expression, 'subtract')
+      subtract_expression.add_child(SyntaxTree::Node.new(:number_literal, '4'))
+      subtract_expression.add_child(SyntaxTree::Node.new(:number_literal, '2'))
       add_expression.add_child(subtract_expression)
 
       program.add_child(add_expression)

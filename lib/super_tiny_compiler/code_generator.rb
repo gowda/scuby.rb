@@ -31,12 +31,12 @@ module SuperTinyCompiler
       end
 
       def transform_number_literal(args)
-        _, value, *_ = args
+        _, value, = args
         value
       end
 
       def transform_string_literal(args)
-        _, value, *_ = args
+        _, value, = args
         "\"#{value}\""
       end
     end
