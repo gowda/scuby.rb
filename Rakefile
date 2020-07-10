@@ -11,8 +11,8 @@ begin
       parser_spec.rb
       transformer_spec.rb
       code_generator_spec.rb
-    ].map { |name| "spec/super_tiny_compiler/#{name}" }.join(' ')
-    ENV['SPEC'] = "#{ENV['SPEC']} spec/super_tiny_compiler_spec.rb"
+    ].map { |name| "spec/scuby/#{name}" }.join(' ')
+    ENV['SPEC'] = "#{ENV['SPEC']} spec/scuby_spec.rb"
   end
 rescue LoadError => ex
   puts ex.full_message

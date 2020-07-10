@@ -3,7 +3,7 @@
 require_relative 'token'
 require_relative 'syntax_tree'
 
-module SuperTinyCompiler
+module Scuby
   module Parser
     def self.included(base)
       base.extend(ClassMethods)

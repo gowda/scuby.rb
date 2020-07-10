@@ -2,7 +2,7 @@
 
 require_relative 'token'
 
-module SuperTinyCompiler
+module Scuby
   module Tokenizer
     def self.included(base)
       base.extend(ClassMethods)

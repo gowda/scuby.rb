@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'super_tiny_compiler/transformer'
+require 'scuby/transformer'
 
-module SuperTinyCompiler
+module Scuby
   class DummyTransformerContainer
     include Transformer
   end

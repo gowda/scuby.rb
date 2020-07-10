@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-# frozen_string_literal
-
-module SuperTinyCompiler
-  require 'super_tiny_compiler/tokenizer'
-  require 'super_tiny_compiler/parser'
-  require 'super_tiny_compiler/transformer'
-  require 'super_tiny_compiler/code_generator'
+module Scuby
+  require 'scuby/tokenizer'
+  require 'scuby/parser'
+  require 'scuby/transformer'
+  require 'scuby/code_generator'
 
   include Tokenizer
   include Parser

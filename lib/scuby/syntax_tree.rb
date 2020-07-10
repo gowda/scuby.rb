@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SuperTinyCompiler
+module Scuby
   module SyntaxTree
     class Node
       attr_accessor :type, :value, :children

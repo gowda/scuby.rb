@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SuperTinyCompiler
+module Scuby
   class Token
     WHITESPACE = /\s/.freeze
     NUMBERS = /[0-9]/.freeze

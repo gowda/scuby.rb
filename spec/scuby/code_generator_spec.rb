@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'super_tiny_compiler/code_generator'
+require 'scuby/code_generator'
 
-module SuperTinyCompiler
+module Scuby
   class DummyCodeGeneratorContainer
     include CodeGenerator
   end

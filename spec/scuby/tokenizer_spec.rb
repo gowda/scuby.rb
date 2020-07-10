@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'super_tiny_compiler/tokenizer'
+require 'scuby/tokenizer'
 
-module SuperTinyCompiler
+module Scuby
   class DummyTokenizerContainer
     include Tokenizer
   end

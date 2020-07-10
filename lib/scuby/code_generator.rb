@@ -2,7 +2,7 @@
 
 require_relative 'syntax_tree'
 
-module SuperTinyCompiler
+module Scuby
   module CodeGenerator
     def self.included(base)
       base.extend(ClassMethods)

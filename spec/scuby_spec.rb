@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'super_tiny_compiler'
+require 'scuby'
 
-describe SuperTinyCompiler do
+describe Scuby do
   let!(:input) { file_fixture('input_source.lisp').read.strip }
   let!(:output) { file_fixture('output_source.c').read.strip }
 
