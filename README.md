@@ -1,4 +1,4 @@
-# super-tiny-compiler.rb
+# scuby.rb
 
 [![tests](https://github.com/gowda/scuby.rb/workflows/tests/badge.svg)](https://github.com/gowda/scuby.rb/actions)
 
