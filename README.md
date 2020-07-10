@@ -14,3 +14,8 @@ $ bin/rubocop
 ```bash
 $ bundle exec rake spec
 ```
+
+## License
+[Gowda](https://github.com/gowda) wrote this code. As long as you retain this notice,
+you can do whatever you want with this stuff. If we meet someday, and you think
+this stuff is worth it, you can buy me a beer in return.
