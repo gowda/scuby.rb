@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - '.git/**/*'
     - 'vendor/**/*'
+    - 'bin/**/*'
 Layout/LineLength:
   IgnoredPatterns: ['\A\s*#']
 Style/Documentation:

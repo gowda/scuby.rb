@@ -7,7 +7,7 @@ Implementation of [jamiebuilds/the-super-tiny-compiler](https://github.com/jamie
 ## Run
 ### Rubocop
 ```bash
-$ bundle exec rake cop
+$ bin/rubocop
 ```
 
 ### Specs
